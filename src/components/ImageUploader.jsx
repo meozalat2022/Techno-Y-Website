@@ -7,12 +7,23 @@ import Image from "next/image";
 const ImageUploader = ({ onChange, onRemove, images, setImages }) => {
   const onUpload = (result) => {
     console.log(result.info.secure_url);
-    setImages([...images, result.info.secure_url]);
+    setImages(result.info.secure_url);
   };
   return (
-    <div>
-      <div className="mb-4 flex flex-wrap items-center gap-4">
-        {images.length > 0 &&
+    <div className="ml-48 mt-10 mb-10 w-[300px] ">
+      <div className="w-[200px]">
+        {!images || images.length <= 0 ? (
+          ""
+        ) : (
+          <Image
+            width={200}
+            height={200}
+            src={images}
+            alt="category"
+            className="object-cover rounded-lg"
+          />
+        )}
+        {/* {images.length > 0 &&
           images.map((url) => (
             <div key={url} className="relative w-[200px] h-[200px]">
               <div className="absolute top-0 right-0 z-10">
@@ -22,7 +33,6 @@ const ImageUploader = ({ onChange, onRemove, images, setImages }) => {
                   className="text-white bg-red-500"
                   size="sm"
                 >
-                  {/* <Trash className="h-4 w-4" /> */}
                 </Button>
               </div>
               <Image
@@ -32,11 +42,19 @@ const ImageUploader = ({ onChange, onRemove, images, setImages }) => {
                 className="object-cover rounded-lg"
               />
             </div>
-          ))}
+          ))} */}
       </div>
       <CldUploadWidget uploadPreset="skwsbpf7" onUpload={onUpload}>
         {({ open }) => {
-          return <button onClick={() => open()}>Upload an Image</button>;
+          return (
+            <button
+              type="button"
+              className="bg-slate-500 p-2 text-white font-semibold rounded-lg"
+              onClick={() => open()}
+            >
+              Upload Image
+            </button>
+          );
         }}
       </CldUploadWidget>
     </div>

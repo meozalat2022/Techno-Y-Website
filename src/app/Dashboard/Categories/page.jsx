@@ -1,17 +1,35 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Descriptions, Form, Input } from "antd";
 import ImageUploader from "@/components/ImageUploader";
 
 const Categories = () => {
+  const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    console.log(values);
+    const response = await fetch(
+      "http://localhost:8000/backend/category/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: values.title,
+          description: values.description,
+          image: images,
+        }),
+      }
+    );
+
+    const data = await response.json();
   };
+
+  console.log(images);
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    setError(errorInfo);
   };
-  console.log(images.length);
   return (
     <Form
       name="basic"
@@ -32,12 +50,12 @@ const Categories = () => {
       autoComplete="off"
     >
       <Form.Item
-        label="Username"
-        name="username"
+        label="Title"
+        name="title"
         rules={[
           {
             required: true,
-            message: "Please input your username!",
+            message: "Please input your title!",
           },
         ]}
       >
@@ -45,30 +63,20 @@ const Categories = () => {
       </Form.Item>
 
       <Form.Item
-        label="Password"
-        name="password"
+        label="Description"
+        name="description"
         rules={[
           {
             required: true,
-            message: "Please input your password!",
+            message: "Please input your description!",
           },
         ]}
       >
-        <Input.Password />
+        <Input />
       </Form.Item>
-      <Form.Item>
+      <div className="w-[250px]">
         <ImageUploader images={images} setImages={setImages} />
-      </Form.Item>
-      <Form.Item
-        name="remember"
-        valuePropName="checked"
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
+      </div>
 
       <Form.Item
         wrapperCol={{
