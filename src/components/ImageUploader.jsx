@@ -6,7 +6,6 @@ import Image from "next/image";
 
 const ImageUploader = ({ onChange, onRemove, images, setImages }) => {
   const onUpload = (result) => {
-    console.log(result.info.secure_url);
     setImages(result.info.secure_url);
   };
   return (

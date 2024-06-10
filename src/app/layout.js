@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Modal from "@/components/Modal";
 // const inter = Inter({ subsets: ["latin"] });
 import { Providers } from "@/redux/provider";
 export const metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Providers>
+          <Modal />
           <Header />
           <Navbar />
           {children}

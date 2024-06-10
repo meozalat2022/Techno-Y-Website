@@ -6,11 +6,11 @@ import {
   getCategoriesStart,
   getCategoriesSuccess,
 } from "@/redux/category/categorySlice";
+import Link from "next/link";
 const Navbar = () => {
   const { error, loading, allCategories } = useSelector(
     (state) => state.category
   );
-  console.log(allCategories);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,11 +38,20 @@ const Navbar = () => {
   return (
     <div className="bg-accent flex gap-1 justify-end  h-24 items-center px-6 ">
       {allCategories.map((item) => (
-        <p className="text-white font-bold p-2 w-28 hover:border border-md rounded-lg hover:translate-y-1 text-center">
+        <Link
+          href={`/productByCategory/:${item._id}`}
+          className="cursor-pointer text-white font-bold p-2 xl:w-28 hover:border border-md rounded-lg hover:translate-y-1 text-center hidden xl:flex justify-center items-center"
+        >
           {item.title}
-        </p>
+        </Link>
       ))}
-      <i className="ri-menu-line text-white font-bold text-3xl"></i>
+      <Link
+        href="?modal=true"
+        className="flex items-center gap-2 p-1 px-3 text-white font-bold cursor-pointer hover:border border-md rounded-lg hover:translate-y-1 text-center"
+      >
+        <p>الكل</p>
+        <i className="ri-menu-line text-white font-bold text-3xl"></i>
+      </Link>
     </div>
   );
 };

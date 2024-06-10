@@ -22,7 +22,7 @@ const Header = () => {
         {/* log in user left  */}
 
         {/* search bar middle */}
-        <div className="">
+        <div className="hidden xl:flex">
           <Space direction="vertical">
             <Search
               className="text-right"

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 import categoryRouter from "./routes/category.js";
+import productRouter from "./routes/product.js";
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -24,6 +25,7 @@ app.listen(8000, () => {
 //category routes
 
 app.use("/backend/category", categoryRouter);
+app.use("/backend/product", productRouter);
 
 //error handling middleware
 
