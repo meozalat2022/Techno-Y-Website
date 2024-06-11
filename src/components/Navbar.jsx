@@ -27,7 +27,6 @@ const Navbar = () => {
           dispatch(getCategoriesFailure(data));
           return;
         }
-
         dispatch(getCategoriesSuccess(data));
       } catch (error) {
         dispatch(getCategoriesFailure(error.message));
@@ -35,6 +34,7 @@ const Navbar = () => {
     };
     fetchCategories();
   }, []);
+
   return (
     <div className="bg-accent flex gap-1 justify-end  h-24 items-center px-6 ">
       {allCategories.map((item) => (

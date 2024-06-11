@@ -10,6 +10,7 @@ export const createCategory = async (req, res, next) => {
 };
 
 export const getAllCategories = async (req, res, next) => {
+  const sort = req.sort;
   try {
     const categories = await Category.find({}).sort({ createdAt: "desc" });
     return res.status(200).json(categories);
