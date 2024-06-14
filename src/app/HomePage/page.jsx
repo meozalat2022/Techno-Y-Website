@@ -1,7 +1,101 @@
-import React from "react";
-
+"use client";
+import { Carousel } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getProductsStart,
+  getProductsSuccess,
+  getProductsFailure,
+} from "@/redux/product/productSlice";
+import Link from "next/link";
+import FilteredProducts from "@/components/FilteredProducts";
+const contentStyle = {
+  height: "360px",
+  color: "#fff",
+  lineHeight: "360px",
+  textAlign: "center",
+  background: "#364d79",
+};
 const HomePage = () => {
-  return <div>HomePage</div>;
+  const { allProducts, loading, error } = useSelector((state) => state.product);
+  const { allCategories } = useSelector((state) => state.category);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        dispatch(getProductsStart());
+        const res = await fetch(
+          "http://localhost:8000/backend/product/products"
+        );
+
+        const data = await res.json();
+
+        if (data.success === false) {
+          dispatch(getProductsFailure(data));
+          return;
+        }
+
+        dispatch(getProductsSuccess(data));
+      } catch (error) {
+        dispatch(getProductsFailure(error.message));
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const promotion = allProducts.filter((item) => item.promotionRate > 0);
+  const sortedCategories = [];
+  for (let i in allCategories) {
+    sortedCategories.push(allCategories[i]);
+  }
+
+  sortedCategories.sort((a, b) => {
+    if (b.createdAt < a.createdAt) {
+      return -1;
+    }
+    if (a.createdAt > b.createdAt) {
+      return 1;
+    }
+    return 0;
+  });
+  const [filterProducts, setFilterProducts] = useState(allProducts);
+
+  const filterItems = (catId) => {
+    const newItem = allProducts.filter((newVal) => {
+      return newVal.category === catId;
+    });
+    setFilterProducts(newItem);
+  };
+  return (
+    <div className="flex flex-col items-center">
+      <div className="w-full max-w-[950px] mb-16">
+        {/* Carousel */}
+        <Carousel autoplay>
+          {promotion?.map((item) => (
+            <div>
+              <h3 style={contentStyle}>{item.title}</h3>
+            </div>
+          ))}
+        </Carousel>
+      </div>
+      {/* products by category filter */}
+      <div className="flex mt-10 gap-8 content-center">
+        {sortedCategories.length > 0 &&
+          sortedCategories.map((item) => (
+            <div
+              onClick={() => filterItems(item._id)}
+              className="bg-primary rounded-full w-24 h-24 flex justify-center items-center cursor-pointer"
+            >
+              <p className="text-white font-semibold">{item.title}</p>
+            </div>
+          ))}
+      </div>
+      <div>
+        <FilteredProducts products={filterProducts} />
+      </div>
+    </div>
+  );
 };
 
 export default HomePage;

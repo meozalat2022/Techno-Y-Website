@@ -26,7 +26,6 @@ const Categories = () => {
     const data = await response.json();
   };
 
-  console.log(images);
   const onFinishFailed = (errorInfo) => {
     setError(errorInfo);
   };

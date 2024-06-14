@@ -35,7 +35,6 @@ const ProductByCategory = ({ params }) => {
     fetchProducts();
   }, [catId]);
 
-  console.log(productsList);
   return (
     <div className="h-full">
       <div className="flex gap-6 my-4 justify-center">
