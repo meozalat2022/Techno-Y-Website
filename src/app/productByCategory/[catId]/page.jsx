@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Card } from "antd";
+import Link from "next/link";
 const { Meta } = Card;
 const ProductByCategory = ({ params }) => {
   const [productsList, setProductsList] = useState([]);
@@ -40,17 +41,23 @@ const ProductByCategory = ({ params }) => {
       <div className="flex gap-6 my-4 justify-center">
         {productsList.length > 0 &&
           productsList.map((item, index) => (
-            <Card
-              hoverable
-              style={{
-                width: 240,
-              }}
-              cover={
-                <img className="h-[150px]" alt="example" src={item.images[0]} />
-              }
-            >
-              <Meta title={item.title} description={item.description} />
-            </Card>
+            <Link href={`/ProductDetails/:${item._id}`}>
+              <Card
+                hoverable
+                style={{
+                  width: 240,
+                }}
+                cover={
+                  <img
+                    className="h-[150px]"
+                    alt="example"
+                    src={item.images[0]}
+                  />
+                }
+              >
+                <Meta title={item.title} description={item.description} />
+              </Card>
+            </Link>
           ))}
       </div>
     </div>

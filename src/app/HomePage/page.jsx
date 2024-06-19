@@ -9,6 +9,7 @@ import {
 } from "@/redux/product/productSlice";
 import Link from "next/link";
 import FilteredProducts from "@/components/FilteredProducts";
+import { useRouter } from "next/navigation";
 const contentStyle = {
   height: "360px",
   color: "#fff",
@@ -17,6 +18,7 @@ const contentStyle = {
   background: "#364d79",
 };
 const HomePage = () => {
+  const router = useRouter();
   const { allProducts, loading, error } = useSelector((state) => state.product);
   const { allCategories } = useSelector((state) => state.category);
   const dispatch = useDispatch();
@@ -59,14 +61,20 @@ const HomePage = () => {
     }
     return 0;
   });
-  const [filterProducts, setFilterProducts] = useState(allProducts);
 
+  const acProducts = allProducts.filter(
+    (item) => item.category === "665582bfe00a2f6280da6b64"
+  );
+  const [filterProducts, setFilterProducts] = useState(acProducts);
+  const [categoryId, setCategoryId] = useState(null);
   const filterItems = (catId) => {
     const newItem = allProducts.filter((newVal) => {
       return newVal.category === catId;
     });
     setFilterProducts(newItem);
+    setCategoryId(catId);
   };
+  const [catIndex, setCatIndex] = useState(9);
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-[950px] mb-16">
@@ -82,10 +90,15 @@ const HomePage = () => {
       {/* products by category filter */}
       <div className="flex mt-10 gap-8 content-center">
         {sortedCategories.length > 0 &&
-          sortedCategories.map((item) => (
+          sortedCategories.map((item, index) => (
             <div
-              onClick={() => filterItems(item._id)}
-              className="bg-primary rounded-full w-24 h-24 flex justify-center items-center cursor-pointer"
+              key={index}
+              onClick={() => {
+                filterItems(item._id), setCatIndex(index);
+              }}
+              className={`bg-primary rounded-full w-24 h-24 flex justify-center items-center cursor-pointer ${
+                catIndex === index ? "opacity-75" : ""
+              }`}
             >
               <p className="text-white font-semibold">{item.title}</p>
             </div>
@@ -93,6 +106,14 @@ const HomePage = () => {
       </div>
       <div>
         <FilteredProducts products={filterProducts} />
+      </div>
+      <div className="mt-10 bg-slate-700 py-4 px-10 hover:opacity-80 rounded-xl">
+        <Link
+          className=" text-center text-white "
+          href={`/productByCategory/:${categoryId}`}
+        >
+          المزيــــــد
+        </Link>
       </div>
     </div>
   );

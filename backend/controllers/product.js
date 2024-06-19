@@ -31,3 +31,15 @@ export const getAllProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getSingleProduct = async (req, res, next) => {
+  try {
+    const prodId = req.params.productId;
+    const id = prodId.slice(2);
+    console.log(id);
+    const product = await Product.findById(id);
+    return res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+};
