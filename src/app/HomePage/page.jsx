@@ -1,5 +1,5 @@
 "use client";
-import { Carousel } from "antd";
+import { Carousel, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,11 +18,9 @@ const contentStyle = {
   background: "#364d79",
 };
 const HomePage = () => {
-  const router = useRouter();
-  const { allProducts, loading, error } = useSelector((state) => state.product);
+  const [allProducts, setAllProducts] = useState([]);
   const { allCategories } = useSelector((state) => state.category);
   const dispatch = useDispatch();
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -37,7 +35,7 @@ const HomePage = () => {
           dispatch(getProductsFailure(data));
           return;
         }
-
+        setAllProducts(data);
         dispatch(getProductsSuccess(data));
       } catch (error) {
         dispatch(getProductsFailure(error.message));
@@ -62,11 +60,8 @@ const HomePage = () => {
     return 0;
   });
 
-  const acProducts = allProducts.filter(
-    (item) => item.category === "665582bfe00a2f6280da6b64"
-  );
-  const [filterProducts, setFilterProducts] = useState(acProducts);
-  const [categoryId, setCategoryId] = useState(null);
+  const [filterProducts, setFilterProducts] = useState();
+  const [categoryId, setCategoryId] = useState("665582bfe00a2f6280da6b64");
   const filterItems = (catId) => {
     const newItem = allProducts.filter((newVal) => {
       return newVal.category === catId;
@@ -75,6 +70,12 @@ const HomePage = () => {
     setCategoryId(catId);
   };
   const [catIndex, setCatIndex] = useState(9);
+  useEffect(() => {
+    setFilterProducts(
+      allProducts.filter((item) => item.category === "665582bfe00a2f6280da6b64")
+    );
+  }, [allProducts]);
+
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-[950px] mb-16">
@@ -105,7 +106,11 @@ const HomePage = () => {
           ))}
       </div>
       <div>
-        <FilteredProducts products={filterProducts} />
+        {!filterProducts || filterProducts.length < 1 ? (
+          <Spin />
+        ) : (
+          <FilteredProducts products={filterProducts} />
+        )}
       </div>
       <div className="mt-10 bg-slate-700 py-4 px-10 hover:opacity-80 rounded-xl">
         <Link

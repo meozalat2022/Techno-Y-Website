@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Card } from "antd";
+import { Card, Spin } from "antd";
 import Link from "next/link";
 const { Meta } = Card;
 const ProductByCategory = ({ params }) => {
@@ -35,7 +35,9 @@ const ProductByCategory = ({ params }) => {
 
     fetchProducts();
   }, [catId]);
-
+  if (!catId) {
+    return <Spin />;
+  }
   return (
     <div className="h-full">
       <div className="flex gap-6 my-4 justify-center">

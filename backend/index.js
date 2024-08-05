@@ -5,6 +5,8 @@ import cors from "cors";
 
 import categoryRouter from "./routes/category.js";
 import productRouter from "./routes/product.js";
+import authRoute from "./routes/auth.js";
+import userRoute from "./routes/user.js";
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -25,7 +27,17 @@ app.listen(8000, () => {
 //category routes
 
 app.use("/backend/category", categoryRouter);
+
+//product routes
 app.use("/backend/product", productRouter);
+
+//auth routes
+
+app.use("/backend/auth", authRoute);
+
+//user routes
+
+app.use("/backend/user", userRoute);
 
 //error handling middleware
 
