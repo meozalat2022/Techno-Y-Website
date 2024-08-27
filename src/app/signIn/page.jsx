@@ -13,18 +13,35 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Flex } from "antd";
 
 const SignIn = () => {
-  const [formData, setFormData] = useState({});
-
   const { error, loading } = useSelector((state) => state.auth);
 
   const router = useRouter();
 
   const dispatch = useDispatch();
 
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const onFinish = async (values) => {
+    console.log("2222222222222", values);
     try {
-    } catch (error) {}
+      dispatch(signInStart());
+      const res = await fetch("http://localhost:8000/backend/auth/signin/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(signInFailure(data));
+        return;
+      }
+
+      dispatch(signInSuccess(data));
+
+      router.push("/");
+    } catch (error) {
+      dispatch(signInFailure(error.message));
+    }
   };
 
   return (
@@ -40,7 +57,7 @@ const SignIn = () => {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="userName"
           rules={[
             {
               required: true,

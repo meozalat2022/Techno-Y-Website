@@ -2,7 +2,7 @@ import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { errorHandler } from "../util/error.js";
-export const signUp = async (req, res, next) => {
+export const signup = async (req, res, next) => {
   const { userName, name, email, phone, address, password } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
 
@@ -22,11 +22,12 @@ export const signUp = async (req, res, next) => {
   }
 };
 
-export const signIn = async (req, res, next) => {
+export const signin = async (req, res, next) => {
   const { userName, password } = req.body;
 
   try {
-    const validUser = User.findOne({ userName });
+    const validUser = await User.findOne({ userName });
+    console.log("111111111111111111111", userName);
 
     if (!validUser) {
       return next(errorHandler(404, "User not found"));
